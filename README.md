@@ -1,10 +1,15 @@
-# Getting Started with Create React App
+## Environment Variables
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+To securely use the Giphy API, you need to create a `.env` file in the root of your project. This file will store your API key without exposing it in the source code.
 
-## Available Scripts
+### Steps to Create and Use the `.env` File
 
-In the project directory, you can run:
+1. **Create the `.env` File**:
+
+   - In the root directory of your project (where `package.json` is located), create a new file named `.env`.
+
+2. **Add this to your `.env` File**:
+   REACT_APP_GIPHY_API_KEY=1bkG7ky5cmw5SLyvNfElcR1iYVzs38Zq
 
 ### `npm start`
 

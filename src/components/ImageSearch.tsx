@@ -1,14 +1,26 @@
+// src/components/ImageSearch.tsx
 import React, { useState, useEffect } from "react";
 
-const API_KEY = "1bkG7ky5cmw5SLyvNfElcR1iYVzs38Zq";
+const API_KEY = process.env.REACT_APP_GIPHY_API_KEY;
 const LIMIT = 3;
 
-function App() {
-  const [query, setQuery] = useState("");
-  const [text, setText] = useState("");
-  const [textPosition, setTextPosition] = useState("below");
-  const [images, setImages] = useState([]);
-  const [offset, setOffset] = useState(0);
+interface Image {
+  id: string;
+  images: {
+    downsized_medium: {
+      url: string;
+    };
+  };
+}
+
+const ImageSearch: React.FC = () => {
+  const [query, setQuery] = useState<string>("");
+  const [text, setText] = useState<string>("");
+  const [textPosition, setTextPosition] = useState<"top" | "bottom" | "below">(
+    "below"
+  );
+  const [images, setImages] = useState<Image[]>([]);
+  const [offset, setOffset] = useState<number>(0);
 
   const fetchImages = async () => {
     const response = await fetch(
@@ -18,7 +30,7 @@ function App() {
     setImages(data.data);
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setOffset(0);
     fetchImages();
@@ -36,7 +48,7 @@ function App() {
     if (query) {
       fetchImages();
     }
-  }, [offset]);
+  }, [offset, query]);
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
@@ -78,7 +90,9 @@ function App() {
             <select
               id="textPosition"
               value={textPosition}
-              onChange={(e) => setTextPosition(e.target.value)}
+              onChange={(e) =>
+                setTextPosition(e.target.value as "top" | "bottom" | "below")
+              }
               className="p-2 border border-gray-300 rounded-md"
             >
               <option value="top">On top of image - center top</option>
@@ -106,12 +120,13 @@ function App() {
                       alt={query}
                       className="w-full rounded-md shadow-md"
                     />
-                    {text && textPosition !== "below" && (
-                      <div
-                        className={`absolute w-full p-2 text-center text-white bg-black bg-opacity-50 ${
-                          textPosition === "top" ? "top-0" : "bottom-0"
-                        }`}
-                      >
+                    {text && textPosition === "top" && (
+                      <div className="absolute top-0 w-full p-2 text-center text-white bg-black bg-opacity-50">
+                        {text}
+                      </div>
+                    )}
+                    {text && textPosition === "bottom" && (
+                      <div className="absolute bottom-0 w-full p-2 text-center text-white bg-black bg-opacity-50">
                         {text}
                       </div>
                     )}
@@ -146,6 +161,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
-export default App;
+export default ImageSearch;
